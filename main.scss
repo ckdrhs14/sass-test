@@ -1,0 +1,178 @@
+@import "./sub", "./sub2";
+
+// 상위 선택자 선택
+.fs {
+    &-small {font-size:12px;}
+    &-mideum {font-size:14px;}
+    &-large {font-size:16px;}
+}
+
+// 중첩
+.box {
+    font : {
+        weight:500;
+        size:10px;
+        family: sans-serif;
+    };
+    margin : {
+        top:20px;
+        left:20px;
+    };
+    padding : {
+        top:10px;
+        bottom:10px;
+        left:20px;
+        right:30px;
+    }
+}
+
+
+// 변수
+.container {
+    $size : 100px;
+    position:fixed;
+    top:$size;
+    .item {
+        $size : 200px;
+        width:$size;
+        height:$size;
+        transform: translateY($size);
+    }
+}
+
+// 산술
+div {
+    width: calc(100% - 300px);
+    background-color:red;
+    $size : 30px;
+    //width:20px + 20px;
+    height:40px - 10px;
+    font-size:10px * 2;
+    padding: 20px % 7;
+}
+span {
+    font: 10px / 10px serif;
+}
+
+// 재활용(mixin)
+@mixin center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+@mixin box($size: 100px, $color: tomato) {
+    width:$size;
+    height:$size;
+    background-color: $color;
+}
+
+.container {
+    @include center;
+    @include box(200px, royalblue);
+    .items {
+        @include center;
+        @include box($color: green);
+    }
+}
+
+
+// 반복문
+/*for (let i = 0; i < 10; i+= 1) {
+    console.log(`loop-${i}`)
+}*/
+
+@for $i from 1 through 10 {
+    .boxs:nth-child(#{$i}) {
+        width:100px * $i;
+    }
+}
+
+// 함수 (youtube 9/16 함수화)
+
+@mixin center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+
+
+
+// 색상내장함수
+.boxTest {
+    $color: royalblue;
+    width:200px;
+    height:100px;
+    margin:20px;
+    border-radius:10px;
+    background-color:$color;
+    &:hover {
+        background-color:darken($color, 10%);
+    }
+    &.built-in {
+        background-color:mix($color, red);
+        background-color:lighten($color, 10%);
+        background-color:saturate($color, 40%);
+        background-color:desaturate($color, 40%);
+        background-color:grayscale($color);
+        background-color:invert($color);
+        background-color:rgba($color, .4);
+    }
+}
+
+// 데이터 종류
+$number : 1;
+$string : bold;
+$color : blue;
+$boolean : true;
+$null : null;
+$list : orange, royalblue, yellow;
+$map : (
+    o : orange,
+    r: royalblue,
+    y : yellow
+);
+
+.box {
+    width:100px;
+    color:red;
+    position:relative;
+}
+
+// 반복
+@each $c in $list {
+    .box {
+        color : $c;
+    }
+}
+
+@each $k, $v in $map {
+    .box-#{$k} {
+        color : $v;
+    }
+}
+
+// 재활용
+@mixin left-top {
+    position:absolute;
+    top:0;
+    left:0;
+    @content;
+}
+
+.container {
+    width:100px;
+    height:100px;
+    @include left-top;
+}
+
+.box {
+    width:200px;
+    height:300px;
+    @include left-top {
+        bottom:0;
+        right:0;
+        margin: auto;
+    }
+}
